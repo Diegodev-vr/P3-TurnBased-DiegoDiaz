@@ -161,7 +161,13 @@ public class TurnManager : MonoBehaviour
             _gameOverTriggered = true;
 
             ///// Trigger the appropriate win/lose/draw animations based on the final HP values of the player and enemy
-            if (player.CurrentHP <= 0)
+            // Check double KO first _DRAW_ scenario, then individual win/lose conditions
+            if (player.CurrentHP <= 0 && enemy.CurrentHP <= 0)
+            {
+                player.GetBoxerAnimator().SetTrigger("Idle");
+                enemy.GetBoxerAnimator().SetTrigger("Idle");
+            }
+            else if (player.CurrentHP <= 0)
             {
                 player.GetBoxerAnimator().SetTrigger("Die");
                 enemy.GetBoxerAnimator().SetTrigger("Win");
@@ -171,17 +177,21 @@ public class TurnManager : MonoBehaviour
                 enemy.GetBoxerAnimator().SetTrigger("Die");
                 player.GetBoxerAnimator().SetTrigger("Win");
             }
-            else // Draw
-            {
-                player.GetBoxerAnimator().SetTrigger("Idle");
-                enemy.GetBoxerAnimator().SetTrigger("Idle");
-            }
         }
 
         ///// Update the turn text to show the final result of the match
-        if (player.CurrentHP > enemy.CurrentHP) turnText.text = "PLAYER 1 WINS!";
-        else if (enemy.CurrentHP > player.CurrentHP) turnText.text = "PLAYER 2 WINS!";
-        else turnText.text = "DRAW!";
+        if (player.CurrentHP <= 0 && enemy.CurrentHP <= 0)
+        {
+            turnText.text = "DRAW!";
+        }
+        else if (player.CurrentHP <= 0)
+        {
+            turnText.text = "PLAYER 2 WINS!";
+        }
+        else if (enemy.CurrentHP <= 0)
+        {
+            turnText.text = "PLAYER 1 WINS!";
+        }   
     }
 
 

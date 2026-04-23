@@ -38,7 +38,8 @@ public class Boxer : MonoBehaviour
     public void TakeDamage(int amount)
     {
         ///// Reduce current health by the damage amount
-        _currentHealth -= amount;
+        //// _currentHealth -= amount;
+        _currentHealth = Mathf.Max(0, _currentHealth - amount);
         // Play 'Block' if they chose it, otherwise 'Hit'
         string trigger = (_currentIntent == ActionType.Block) ? "Block" : "Hit";
         ///// Trigger the appropriate animation based on whether they blocked or got hit
